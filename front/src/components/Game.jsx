@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import "./Game.css";
 
-const Game = ({ role, xo, socket }) => {
+const Game = ({ role, xo, socket, winner }) => {
   const select = (x, y) => {
     console.log("hello");
     socket.emit("Turn", { x, y, role });
@@ -11,6 +11,7 @@ const Game = ({ role, xo, socket }) => {
   return (
     <div>
       <h1>Your role is {role}</h1>
+      <h2> {winner === "" ? "" : `The winner is ${winner}`} </h2>
       <div className="game">
         {xo.map((line, x) => {
           return (

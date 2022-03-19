@@ -8,6 +8,7 @@ function App() {
   const [role, setRole] = useState(false);
   const [canPlay, setCanPlay] = useState(true);
   const [xo, setXo] = useState([]);
+  const [winner, setWinner] = useState("");
 
   useEffect(() => {
     const newSocket = io(`http://localhost:8080`);
@@ -26,6 +27,9 @@ function App() {
       socket.on("xo", (resp) => {
         setXo(resp);
       });
+      socket.on("winner", (resp) => {
+        setWinner(resp);
+      });
     }
   }, [socket]);
 
@@ -33,7 +37,9 @@ function App() {
     <div className="App">
       {!role && canPlay ? <h1>waiting for 2nd player</h1> : null}
       {!canPlay ? <h1>Room is full</h1> : null}
-      {role ? <Game role={role} xo={xo} socket={socket} /> : null}
+      {role ? (
+        <Game role={role} xo={xo} socket={socket} winner={winner} />
+      ) : null}
     </div>
   );
 }

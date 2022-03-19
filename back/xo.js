@@ -34,8 +34,15 @@ Playing = (io, socket) => {
     let { x, y, role } = data;
     if (role == currPlayer) {
       xo[x][y] = currPlayer;
-      currPlayer = currPlayer == "X" ? "O" : "X";
-      EmmitXO(io);
+      winner = TestWin();
+      if (winner == "X" || winner == "O") {
+        EmmitXO(io);
+        EmmitWinner(io, winner);
+        currPlayer = "";
+      } else {
+        currPlayer = currPlayer == "X" ? "O" : "X";
+        EmmitXO(io);
+      }
     }
   });
 };
@@ -57,21 +64,41 @@ EmmitXO = (io) => {
   });
 };
 
+EmmitWinner = (io, winner) => {
+  players.forEach((player) => {
+    io.to(player).emit("winner", winner);
+  });
+};
+
 const reset = (io) => {
   xo = [
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ];
+  currPlayer = "X";
+  winner = "";
   EmmitXO(io);
+  EmmitWinner(io, "");
 };
 
-const posCurPlayer = () => {
-  return currPlayer === "X" ? 0 : 1;
-};
-
-const posOldPlayer = () => {
-  return currPlayer === "X" ? 1 : 0;
+const TestWin = () => {
+  for (var i = 0; i < xo.length; i++) {
+    if (xo[i][0] == xo[i][1] && xo[i][1] == xo[i][2]) {
+      return xo[i][0];
+    }
+    if (xo[0][i] == xo[1][i] && xo[1][i] == xo[2][i]) {
+      console.log(xo[0][i]);
+      return xo[0][i];
+    }
+  }
+  if (xo[0][0] == xo[1][1] && xo[1][1] == xo[2][2]) {
+    return xo[1][1];
+  }
+  if (xo[0][2] == xo[1][1] && xo[1][1] == xo[2][0]) {
+    return xo[1][1];
+  }
+  return "";
 };
 
 module.exports = {
