@@ -1,0 +1,19 @@
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colonne {
+  height: 100px;
+  width: 100px;
+  border: solid 5px white;
+  margin: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 80px;
+}
